@@ -1,9 +1,11 @@
 ---
-title: "Skill Requirement for Sports"
+title: "Top 6 Most Difficult Sports"
 echo: false
 message: false
 warning: false
 ---
+
+There is a surprising difference in the difficulty for the top 6 "hardest" sports. The data in this project/plot were pulled from an online database on Kaggle with the different requirements for different sectors of skills required for a variety of sports. To make the graph, we mapped the data to find the top six hardest sports in terms of difficulty. Comparing the top six hardest sports in the category of difficulty, we see that boxing is the hardest sport.
 
 ```{r}
 #| label: setup
@@ -61,19 +63,13 @@ create_bar_plot <- function(data, y_var, title, y_label) {
     )
 }
 
-# Get top 6 sports by strength and difficulty
-top6_strength <- get_top_sports(toughest_sport, "Strength")
+# Get top 6 sports by overall difficulty
 top6_difficulty <- get_top_sports(toughest_sport, "average_score")
 
-# Create bar plots
-p1 <- create_bar_plot(top6_strength, "Strength", "Top 6 Sports by Strength", "Strength")
+# Create bar plot for overall difficulty
 p2 <- create_bar_plot(top6_difficulty, "average_score", "Top 6 Sports by Overall Difficulty", "Average Score")
 
-# Arrange the plots and add a horizontal line
-grid.newpage()
-pushViewport(viewport(layout = grid.layout(3, 1, heights = unit(c(0.45, 0.05, 0.45), "npc"))))
-print(p1, vp = viewport(layout.pos.row = 1))
-grid.lines(x = c(0, 1), y = 0.5, gp = gpar(col = "black", lwd = 2))
-print(p2, vp = viewport(layout.pos.row = 3))
+# Print the plot
+print(p2)
 ```
 

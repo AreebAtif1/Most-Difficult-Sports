@@ -2,18 +2,10 @@
 title: "About This Project"
 ---
 
-This is my final project for the David Science Course that I am taking
+Hi! My name is Areeb Atif, and I’m a high schooler from the Garden State (New Jersey).
 
+You can see this project and much more at my github, https://github.com/AreebAtif1.
 
+I made this project because I like sports and am interested in physical activity. If you want to see more details about my project, here is my github repo - https://github.com/AreebAtif1/Most-Difficult-Sports
 
-
-
-
-
-
-
-
-Sources:
-
-ChatGPT
-
+This project was created as a part of Kane’s Data Sciece Bootcamp - https://bootcamp.davidkane.info/.
