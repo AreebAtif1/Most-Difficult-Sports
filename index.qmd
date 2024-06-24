@@ -1,0 +1,79 @@
+---
+title: "Skill Requirement for Sports"
+echo: false
+message: false
+warning: false
+---
+
+```{r}
+#| label: setup
+#| echo: false
+#| message: false
+
+library(tidyverse)
+library(primer.data)
+library(ggplot2)
+library(readr)
+library(dplyr)
+library(grid)
+library(gridExtra)
+```
+
+```{r}
+# Read the CSV file
+toughest_sport <- read_csv("toughestsport.csv")
+
+# Calculate the average score for each sport across all categories
+toughest_sport <- toughest_sport %>%
+  rowwise() %>%
+  mutate(average_score = mean(c_across(Endurance:Durability), na.rm = TRUE)) %>%
+  ungroup()
+
+# Select top 6 sports based on a specific column
+get_top_sports <- function(data, column) {
+  data %>% arrange(desc(!!sym(column))) %>% slice(1:6)
+}
+
+# Define a manual color scale for the sports
+sport_colors <- c(
+  "Boxing" = "#1f78b4", "Ice Hockey" = "#33a02c", "Football" = "#e31a1c",
+  "Basketball" = "#ff7f00", "Wrestling" = "#6a3d9a", "Martial Arts" = "#b15928",
+  "Tennis" = "#a6cee3", "Gymnastics" = "#b2df8a", "Baseball" = "#fb9a99",
+  "Soccer" = "#fdbf6f"
+)
+
+# Ensure all sports are represented in the legend by adding rows for missing sports with NA values
+all_sports <- data.frame(SPORT = names(sport_colors))
+toughest_sport <- full_join(toughest_sport, all_sports, by = "SPORT")
+
+# Create a bar plot
+create_bar_plot <- function(data, y_var, title, y_label) {
+  ggplot(data, aes(x = reorder(SPORT, !!sym(y_var)), y = !!sym(y_var), fill = SPORT)) +
+    geom_bar(stat = "identity") +
+    coord_flip() +
+    labs(title = title, x = "Sport", y = y_label) +
+    theme_minimal() +
+    scale_fill_manual(values = sport_colors, drop = FALSE) +
+    theme(
+      plot.title = element_text(hjust = 0.5, face = "bold"),  # Center and bold title
+      axis.title.x = element_text(face = "bold"),             # Bold x axis title
+      axis.title.y = element_text(face = "bold")              # Bold y axis title
+    )
+}
+
+# Get top 6 sports by strength and difficulty
+top6_strength <- get_top_sports(toughest_sport, "Strength")
+top6_difficulty <- get_top_sports(toughest_sport, "average_score")
+
+# Create bar plots
+p1 <- create_bar_plot(top6_strength, "Strength", "Top 6 Sports by Strength", "Strength")
+p2 <- create_bar_plot(top6_difficulty, "average_score", "Top 6 Sports by Overall Difficulty", "Average Score")
+
+# Arrange the plots and add a horizontal line
+grid.newpage()
+pushViewport(viewport(layout = grid.layout(3, 1, heights = unit(c(0.45, 0.05, 0.45), "npc"))))
+print(p1, vp = viewport(layout.pos.row = 1))
+grid.lines(x = c(0, 1), y = 0.5, gp = gpar(col = "black", lwd = 2))
+print(p2, vp = viewport(layout.pos.row = 3))
+```
+
